@@ -14,8 +14,6 @@ interface WeatherApi {
     suspend fun getWeather(
         @Query("q") city: String = "kolkata",
 
-        @Query("cnt") cnt: String = "7",
-
         @Query("units") unit: String = "metric",
 
         @Query("appid") appid: String = API_ID

@@ -42,10 +42,14 @@ fun Navigation(
             if (weatherData.loading == true) {
                 CircularProgressIndicator()
             } else {
-                HomeScreen(
-                    navController = navController,
-                    rootObject = weatherData.data!!
-                )
+                if (weatherData.data == null) {
+                    EmptyScreen()
+                } else {
+                    HomeScreen(
+                        navController = navController,
+                        rootObject = weatherData.data!!
+                    )
+                }
             }
         }
 

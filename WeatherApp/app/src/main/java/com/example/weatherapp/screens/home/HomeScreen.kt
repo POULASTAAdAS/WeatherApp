@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccessibilityNew
 import androidx.compose.material.icons.rounded.Air
@@ -23,9 +24,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +37,10 @@ import com.example.weatherapp.model.RootObject
 import com.example.weatherapp.screens.widgets.FiveDayForecast
 import com.example.weatherapp.screens.widgets.ThreeHourForecast
 import com.example.weatherapp.screens.widgets.Widgets
+import com.example.weatherapp.util.calculateDirection
+import com.example.weatherapp.util.getIcon
+import com.example.weatherapp.util.returnMaxTemp
+import com.example.weatherapp.util.returnMinTemp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,30 +109,44 @@ fun MainContent(
                         .padding(top = 9.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.End
+
                 ) {
-                    Widgets(
-                        data = "     ${rootObject.list[0].main.humidity} ",
-                        Icons.Rounded.Air
-                    )
 
-                    Spacer(modifier = Modifier.height(5.dp))
+                    Row {
+                        Column(
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Widgets(
+                                data = "   ${rootObject.list[0].wind.speed}km",
+                                Icons.Rounded.Air
+                            )
 
+                            Spacer(modifier = Modifier.height(10.dp))
 
-                    val feelsLike = remember { mutableStateOf("36") }
-
-                    LaunchedEffect(key1 = Unit) {
-                        val maxTemp = ArrayList<Int>()
-                        for (i in 1..8) {
-                            maxTemp.add(rootObject.list[i].main.feels_like.toInt())
+                            Widgets(
+                                data = "    \t     ${calculateDirection(rootObject.list[0].wind.deg)}",
+                                icon = getIcon(calculateDirection(rootObject.list[0].wind.deg))
+                            )
                         }
 
-                        feelsLike.value = maxTemp.max().toString()
-                    }
+                        Spacer(modifier = Modifier.width(10.dp))
 
-                    Widgets(
-                        data = " ${feelsLike.value}ºC",
-                        Icons.Rounded.AccessibilityNew
-                    )
+                        Column(
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Widgets(
+                                data = "      ${rootObject.list[0].main.humidity}%",
+                                Icons.Rounded.Air
+                            )
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Widgets(
+                                data = "   ${rootObject.list[0].main.feels_like.toInt()} ºC",
+                                Icons.Rounded.AccessibilityNew
+                            )
+                        }
+                    }
                 }
             }
 
@@ -148,19 +164,21 @@ fun MainContent(
 
                 Row {
                     Widgets(
-                        data = rootObject.list[0].main.temp_max.toString().split(".")[0],
+                        data = returnMaxTemp(rootObject, 0),
                         icon = Icons.Rounded.ArrowUpward,
                         color = Color.Transparent,
-                        padding = 0.dp
+                        padding = 0.dp,
+                        unit = true
                     )
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.width(10.dp))
 
                     Widgets(
-                        data = rootObject.list[0].main.temp_min.toString().split(".")[0],
+                        data = returnMinTemp(rootObject, 0),
                         icon = Icons.Rounded.ArrowDownward,
                         color = Color.Transparent,
-                        padding = 0.dp
+                        padding = 0.dp,
+                        unit = true
                     )
                 }
 

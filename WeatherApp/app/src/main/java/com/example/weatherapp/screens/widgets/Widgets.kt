@@ -44,7 +44,8 @@ fun Widgets(
     icon: ImageVector,
     color: Color = Color.LightGray,
     padding: Dp = 5.dp,
-    iconColor: Color = Color.Black
+    iconColor: Color = Color.Black,
+    unit: Boolean = false
 ) {
     Surface(
         shape = Shapes().medium,
@@ -60,7 +61,7 @@ fun Widgets(
                 contentDescription = "icon",
                 tint = iconColor
             )
-            Text(text = data)
+            Text(text = if (unit) "$data ºC" else data)
         }
     }
 }
@@ -87,13 +88,14 @@ fun FiveDayForecast(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            var i = 1
-            val l = listOf(1, 8, 16, 24, 32, 40)
-
             Row {
+                var i = 1
+                val l = listOf(1, 8, 16, 24, 32, 40)
+
                 rootObject.list.forEach {
                     i++
                     if (i in l) {
+
                         SingleDay(
                             weaObject = it,
                             tempMax = "33",
@@ -107,6 +109,7 @@ fun FiveDayForecast(
         }
     }
 }
+
 
 
 @Composable

@@ -13,7 +13,7 @@ import com.example.weatherapp.model.Wind
 fun dummyData() = RootObject(
     cod = "200",
     message = 0,
-    cnt = 7,
+    cnt = 40,
     list = weatherObject(),
     city = City(
         coord = Coord(
